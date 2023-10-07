@@ -26,7 +26,7 @@ class SignInSchema(CamelModel):
 
 @router.post('/sign-up', response_model=UserSchema)
 async def sign_up(data: SignInSchema):
-    if settings.SIGN_UP_DISABLED:
+    if settings.IS_SIGN_UP_DISABLED:
         raise HTTPException(status_code=423, detail='Sign up is disabled')
     crypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
     data.password = crypt_context.hash(data.password)

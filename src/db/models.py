@@ -13,7 +13,7 @@ class User(Model):
     first_name = fields.CharField(max_length=50)
     last_name = fields.CharField(max_length=50)
     email = fields.CharField(max_length=254, unique=True)
-    password = fields.CharField(max_length=50)
+    password = fields.CharField(max_length=255)
 
 
 class Food(Model):
