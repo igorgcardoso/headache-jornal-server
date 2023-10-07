@@ -17,13 +17,13 @@ RUN pip install -r requirements.txt
 # Copy the rest of the application code into the container at /app
 COPY . .
 
+RUN aerich upgrade
+
 # Set the working directory to /app/src
 WORKDIR /app/src
 
 # Expose port 8000
 EXPOSE 8000
-
-RUN aerich upgrade
 
 # Start the application using uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0"]
