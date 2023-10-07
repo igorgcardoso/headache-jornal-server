@@ -51,5 +51,5 @@ async def sign_in(data: SignInRequestSchema):
     crypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
     if not crypt_context.verify(data.password, user.password):
         raise HTTPException(status_code=401, detail='Invalid email or password')
-    to_encode = {'sub': user.id, 'exp': datetime.utcnow() + timedelta(days=30)}
+    to_encode = {'sub': str(user.id), 'exp': datetime.utcnow() + timedelta(days=30)}
     return SignInResponseSchema(token=jwt.encode(to_encode, settings.SECRET_KEY, algorithm='HS256'))
