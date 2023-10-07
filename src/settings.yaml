@@ -1,0 +1,7 @@
+development:
+  IS_DOCS_ENABLED: true
+  IS_SIGN_UP_ENABLED: true
+
+production:
+  IS_DOCS_ENABLED: false
+  IS_SIGN_UP_ENABLED: false

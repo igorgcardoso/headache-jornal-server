@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "server"
+version = "0.1.0"
+description = ""
+authors = ["Igor Cardoso <igorgcardoso7@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = { extras = ["all"], version = "^0.103.1" }
+tortoise-orm = {extras = ["asyncpg"], version = "^0.20.0"}
+dynaconf = { extras = ["yaml"], version = "^3.2.3" }
+pendulum = "^2.1.2"
+aerich = "^0.7.2"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+
+[tool.aerich]
+tortoise_orm = "tortoise_config.TORTOISE_ORM"
+location = "./src/migrations"
+src_folder = "./src/"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
