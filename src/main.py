@@ -22,6 +22,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+if not settings.IS_DOCS_ENABLED:
+    app.docs_url = None
+
 @app.exception_handler(DoesNotExist)
 async def doesnotexist_exception_handler(request: Request, exc: DoesNotExist):
     return JSONResponse(status_code=404, content={"detail": str(exc)})
