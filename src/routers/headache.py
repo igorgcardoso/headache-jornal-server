@@ -115,7 +115,7 @@ async def add_foods_and_drinks(id: str, foods: List[str], drinks: List[str], use
 
 class HeadacheRemedySchemaIn(CamelModel):
     id: str
-    quantity: int = Field(..., gt=1)
+    quantity: int = Field(..., ge=1)
 
 
 @router.patch('/{id}/remedies', response_model=HeadacheSchema)
