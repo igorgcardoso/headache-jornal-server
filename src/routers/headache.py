@@ -18,7 +18,6 @@ router = APIRouter(
 )
 
 class HeadacheSchemaIn(CamelModel):
-    user_id: str
     start_timestamp: str
     end_timestamp: Optional[str] = None
     intensity: HeadacheIntensity
@@ -76,7 +75,7 @@ async def add_headache(headache: HeadacheSchemaIn, latitude: Annotated[float, Qu
         apparent_temperature=weather_data.apparent_temperature[0],
     )
 
-    headache_obj = await Headache.create(**data, weather=weather)
+    headache_obj = await Headache.create(**data, weather=weather, user=user)
 
     return await HeadacheSchema.from_tortoise_orm(headache_obj)
 
