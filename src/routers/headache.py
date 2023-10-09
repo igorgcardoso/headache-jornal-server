@@ -3,6 +3,7 @@ from typing import Annotated, List, Optional
 import pendulum
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import Field
+from tortoise.exceptions import DoesNotExist
 from tortoise.transactions import atomic
 
 from db.enums import HeadacheIntensity, HeadacheSide, RemedyResult
@@ -128,7 +129,7 @@ async def add_remedies(id: str, remedy: HeadacheRemedySchemaIn, user: Annotated[
         headache_remedy = await HeadacheRemedy.get(remedy=remedy_model, headache=headache)
         headache_remedy.quantity += remedy.quantity
         await headache_remedy.save()
-    except HeadacheRemedy.DoesNotExist:
+    except DoesNotExist:
         headache_remedy = await HeadacheRemedy.create(remedy=remedy_model, quantity=remedy.quantity, headache=headache)
 
     return await HeadacheSchema.from_tortoise_orm(headache)
