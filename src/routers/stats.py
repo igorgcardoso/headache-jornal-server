@@ -73,8 +73,6 @@ async def stats(user: Annotated[User, Depends(get_current_user)], start_date: An
     most_common_side = await headaches.order_by('-count_side').first()
     headache = await headaches.first()
 
-
-
     return HeadacheStatsSchema(
         occurrences=occurrences,
         most_common_intensity=most_common_intensity,
@@ -84,6 +82,7 @@ async def stats(user: Annotated[User, Depends(get_current_user)], start_date: An
         most_common_side=most_common_side.side,
         most_common_side_name=most_common_side.side.name,
         mean_temperature=headache.mean_temperature,
+        mean_apparent_temperature=headache.mean_apparent_temperature,
         mean_uv_index=headache.mean_uv_index,
         mean_shortwave_radiation=headache.mean_shortwave_radiation,
         mean_min_temperature=headache.mean_min_temperature,

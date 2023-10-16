@@ -55,7 +55,7 @@ class Weather(Model):
 class Headache(Model):
     id = fields.UUIDField(pk=True, default=uuid4)
     user = fields.ForeignKeyField('models.User', related_name=None)
-    start_timestamp = fields.DatetimeField(auto_now_add=True)
+    start_timestamp = fields.DatetimeField()
     end_timestamp = fields.DatetimeField(null=True)
     intensity = fields.IntEnumField(enum_type=HeadacheIntensity)
     side = fields.CharEnumField(enum_type=HeadacheSide)

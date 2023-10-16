@@ -3,7 +3,6 @@ from typing import Annotated, List, Optional
 import pendulum
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import Field
-from tortoise.exceptions import DoesNotExist
 from tortoise.transactions import atomic
 
 from db.enums import HeadacheIntensity, HeadacheSide, RemedyResult
@@ -125,12 +124,7 @@ async def add_remedies(id: str, remedy: HeadacheRemedySchemaIn, user: Annotated[
     headache = await Headache.get(id=id)
     remedy_model = await Remedy.get(id=remedy.id)
 
-    try:
-        headache_remedy = await HeadacheRemedy.get(remedy=remedy_model, headache=headache)
-        headache_remedy.quantity += remedy.quantity
-        await headache_remedy.save()
-    except DoesNotExist:
-        headache_remedy = await HeadacheRemedy.create(remedy=remedy_model, quantity=remedy.quantity, headache=headache)
+    headache_remedy = await HeadacheRemedy.create(remedy=remedy_model, quantity=remedy.quantity, headache=headache)
 
     return await HeadacheSchema.from_tortoise_orm(headache)
 
@@ -138,11 +132,11 @@ async def add_remedies(id: str, remedy: HeadacheRemedySchemaIn, user: Annotated[
 class HeadacheRemedyResultSchema(CamelModel):
     result: str
 
-@router.patch('/{id}/remedies/{remedy_id}/result', response_model=HeadacheSchema)
-async def set_remedy_result(id: str, remedy_id: str, body: HeadacheRemedyResultSchema, user: Annotated[User, Depends(get_current_user)]):
+@router.patch('/{id}/remedies/{headache_remedy_id}/result', response_model=HeadacheSchema)
+async def set_remedy_result(id: str, headache_remedy_id: str, body: HeadacheRemedyResultSchema, user: Annotated[User, Depends(get_current_user)]):
     if user is None:
         raise HTTPException(status_code=401, detail='Unauthorized')
-    headache_remedy = await HeadacheRemedy.get(id=remedy_id, headache_id=id)
+    headache_remedy = await HeadacheRemedy.get(id=headache_remedy_id, headache_id=id)
     if headache_remedy.result != RemedyResult.NO_EFFECT:
         raise HTTPException(status_code=403, detail='Result already set')
 
