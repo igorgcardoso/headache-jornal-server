@@ -39,6 +39,8 @@ class HeadacheRemedy(Model):
     result = fields.CharEnumField(enum_type=RemedyResult, default=RemedyResult.NO_EFFECT)
     taken_timestamp = fields.DatetimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-taken_timestamp']
 
 class Weather(Model):
     id = fields.UUIDField(pk=True, default=uuid4)
