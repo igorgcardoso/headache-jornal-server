@@ -55,11 +55,14 @@ async def sign_in(data: SignInRequestSchema):
     return SignInResponseSchema(token=jwt.encode(to_encode, settings.SECRET_KEY, algorithm='HS256'))
 
 
+class VerifyDataSchema(CamelModel):
+    token: str
+
 class VerifyResponseSchema(CamelModel):
     is_valid: bool
 
 @router.post('/verify', response_model=VerifyResponseSchema)
-async def verify(data: SignInResponseSchema):
+async def verify(data: VerifyDataSchema):
     try:
         jwt.decode(data.token, settings.SECRET_KEY, algorithms=['HS256'])
     except:
