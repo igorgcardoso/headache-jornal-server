@@ -53,3 +53,15 @@ async def sign_in(data: SignInRequestSchema):
         raise HTTPException(status_code=401, detail='Invalid email or password')
     to_encode = {'sub': str(user.id), 'exp': datetime.utcnow() + timedelta(days=30)}
     return SignInResponseSchema(token=jwt.encode(to_encode, settings.SECRET_KEY, algorithm='HS256'))
+
+
+class VerifyResponseSchema(CamelModel):
+    is_valid: bool
+
+@router.post('/verify', response_model=VerifyResponseSchema)
+async def verify(data: SignInResponseSchema):
+    try:
+        jwt.decode(data.token, settings.SECRET_KEY, algorithms=['HS256'])
+    except:
+        return VerifyResponseSchema(is_valid=False)
+    return VerifyResponseSchema(is_valid=True)
